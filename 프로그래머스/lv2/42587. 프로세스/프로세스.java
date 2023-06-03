@@ -1,30 +1,31 @@
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 class Solution {
     public int solution(int[] priorities, int location) {
-		int answer = 0;
+				int answer = 1;
 		int[] numArray = new int[priorities.length];
-		int time = 0;
-		int count = 0;
-		while (true) {
-			int index = time % priorities.length;
-			boolean check = true;
+		System.arraycopy(priorities, 0, numArray, 0, priorities.length);
+		Arrays.sort(numArray);
+		Queue<Integer> queue = new LinkedList<>();
+		for (int i = 0; i < priorities.length; i++) {
+			queue.add(numArray[priorities.length - 1 - i]);
+		}
+		while (!queue.isEmpty()) {
 			for (int i = 0; i < priorities.length; i++) {
-				int num = priorities[i];
-				if (num > priorities[index]) {
-					check = false;
-					break;
+				if (priorities[i] == queue.peek()) {
+					if (i == location) {
+						return answer;
+					}
+					queue.poll();
+					answer++;
 				}
-			}
-			if (check) {
-				count++;
-				numArray[index] = count;
-				priorities[index] = 0;
-			}
-			time++;
-			if (numArray[location] != 0) {
-				answer = numArray[location];
-				break;
 			}
 		}
 		return answer;
+
     }
 }
+/* 우선순위 큐를 참고
+원래 priorityQueue를 사용할 수도 있으나 queue로 구현
+*/
