@@ -1,41 +1,46 @@
+import java.util.*;
 class Solution {
     public int solution(String s) {
-        int answer = s.length();
-        int length = s.length();
-        for(int i = 1; i<length; i++){
-            int size = (int)Math.ceil((double)length/i);
-            int index = 0;
+        int len = s.length();
+        int answer = len;
+        for(int i = 1; i<len;i++){
+            int size = (int)Math.ceil((double)len/i);
             String[] arr = new String[size];
-            for(int j = 0;j<length;j+=i){
-                arr[index++] = s.substring(j,Math.min(j+i,length));
+            int index = 0;
+            for(int j = 0;j<len;j=j+i){
+                arr[index] = s.substring(j,Math.min(j+i,len));
+                index = index + 1;
             }
-            int result = splitSize(arr);
-            answer = Math.min(answer,result);
-        }
+            int sum = impl(arr);
+            if(answer > sum){
+                answer = sum;
+            }
+        } 
         return answer;
     }
-    static int splitSize(String[] arr){
-        String answer = "";
+    
+    static int impl(String[] arr){
+        int size = arr.length;
+        String answer ="";
         String pivot = arr[0];
         int num = 1;
-        for(int i = 1; i<arr.length;i++){
-            if(pivot.equals(arr[i])){
-                num++;
-            }
-            else{
+        for(int i = 1; i<size;i++){
+            if(!pivot.equals(arr[i])){
                 if(num==1){
-                    answer += pivot;
+                    answer+= pivot;
                 }else{
-                    answer += String.valueOf(num)+pivot;
+                    answer += String.valueOf(num)+pivot;    
                 }
                 pivot = arr[i];
                 num = 1;
+            }else{
+                num++;
             }
-            if(i==arr.length-1){
+            if(i==size-1){
                 if(num==1){
-                    answer += pivot;
+                    answer+= pivot;
                 }else{
-                    answer += String.valueOf(num)+pivot;
+                    answer += String.valueOf(num)+pivot;    
                 }
             }
         }
