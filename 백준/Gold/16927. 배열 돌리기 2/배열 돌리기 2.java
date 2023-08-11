@@ -21,12 +21,14 @@ public class Main {
 			}
 		}
 		rotate(0, 0, N, M);
+		StringBuilder sb = new StringBuilder();
 		for(int i = 0; i< N;i++) {
 			for(int j = 0;j<M;j++) {
-				System.out.print(arr[i][j]+" ");
+				sb.append(arr[i][j]).append(" ");
 			}
-			System.out.println("");
+			sb.append("\n");
 		}
+		System.out.println(sb);
 	}
 
 	static void rotate(int y, int x, int n, int m) {
