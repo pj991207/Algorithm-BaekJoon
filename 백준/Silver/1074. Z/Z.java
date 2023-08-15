@@ -24,6 +24,9 @@ public class Main {
 			return;
 		}
 		if(y<=r&&r<y+size&&x<=c&&c<x+size) {
+			if(size/2==0) {
+				return;
+			}
 			Z(y,x,size/2);
 			Z(y,x+size/2,size/2);
 			Z(y+size/2,x,size/2);
