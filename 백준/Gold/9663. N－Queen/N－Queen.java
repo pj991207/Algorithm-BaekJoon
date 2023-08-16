@@ -1,4 +1,3 @@
-
 import java.util.*;
 import java.io.*;
 
@@ -15,15 +14,18 @@ public class Main {
 	}
 	
 	static void Nqueen(int x) {
-		if(!isAvaliable(x-1)) {
-			return;
-		}
+//		if(!isAvaliable(x-1)) {
+//			return;
+//		}
 		if(x==N) {
 			ans++;
 			return;
 		}
 		for(int i = 0; i<N;i++) {
 			map[x] = i;
+			if(!isAvaliable(x)) {
+				continue;
+			}
 			Nqueen(x+1);
 		}
 	}
