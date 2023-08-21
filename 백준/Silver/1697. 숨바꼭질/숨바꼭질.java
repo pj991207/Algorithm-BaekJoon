@@ -3,38 +3,36 @@ import java.io.*;
 public class Main {
 	static int N;
 	static int K;
-	static int len;
 	static int[] arr;
-	static Queue<Integer> q = new LinkedList<>();
-	public static void main(String[] args) throws IOException{
+	public static void main(String[] args) throws Exception {
 		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(bf.readLine());
 		N = Integer.parseInt(st.nextToken());
 		K = Integer.parseInt(st.nextToken());
-		arr = new int[200000];
-		Arrays.fill(arr,-1);
-		len = arr.length;
+		arr = new int[1000000];
 		bfs(N);
-		System.out.println(arr[K]);
+		System.out.println(arr[K]-1);
 	}
-	static void bfs(int x) {
-		arr[x] = 0;
-		q.add(x);
+	static void bfs(int N) {
+		Queue<Integer> q = new ArrayDeque<>();
+		q.add(N);
+		arr[N] = 1;
 		while(!q.isEmpty()) {
-			int y = q.poll();
-			int a = y+1;
-			int b = y-1;
-			int c = y*2;
-			change(y,a);
-			change(y,b);
-			change(y,c);
-		}
-	}
-	static void change(int y,int a) {
-		if(a>=0&&a<len) {
-			if(arr[a]==-1) {
-				arr[a]=arr[y]+1;
-				q.add(a);
+			int next = q.poll();
+			if(next==K) {
+				return;
+			}
+			if(2*next<arr.length&&arr[2*next]==0) {
+				arr[2*next]=arr[next]+1;
+				q.add(2*next);
+			}
+			if(next+1<arr.length&&arr[next+1]==0) {
+				arr[next+1]=arr[next]+1;
+				q.add(next+1);
+			}
+			if(next-1>=0&&arr[next-1]==0) {
+				arr[next-1] = arr[next]+1;
+				q.add(next-1);
 			}
 		}
 	}
