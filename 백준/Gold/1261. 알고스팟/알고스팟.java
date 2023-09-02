@@ -5,84 +5,98 @@ public class Main {
 	static int N;
 	static int M;
 	static int[][] map;
-	static int[][] arr;
-	static int[] dy = { -1, 0, 1, 0 };
-	static int[] dx = { 0, 1, 0, -1 };
-
+	static int[][] value;
+	static int ans;
+	static int[] dy = {-1,0,1,0};
+	static int[] dx = {0,1,0,-1};
+	static boolean[][] visited;
 	public static void main(String[] args) throws Exception {
 		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(bf.readLine());
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		map = new int[M][N];
-		arr = new int[M][N];
-		// 초기화
-		init(bf);
-		// BFS를 통한 탐색
-		bfs(new Pos(0, 0));
-		// 출력
-		System.out.println(arr[M - 1][N - 1]);
-	}
-
-	static void init(BufferedReader bf) throws Exception {
-		for (int i = 0; i < M; i++) {
-			String[] st = bf.readLine().split("");
-			for (int j = 0; j < N; j++) {
-				map[i][j] = Integer.parseInt(st[j]);
-			}
-			Arrays.fill(arr[i], -1);
+		M = Integer.parseInt(st.nextToken()); //가로
+		N = Integer.parseInt(st.nextToken()); //세로
+		ans = Integer.MAX_VALUE;
+		map = new int[N][M];
+		value = new int[N][M];
+		for(int i = 0;i<N;i++) {
+			Arrays.fill(value[i], -1);
 		}
+		visited = new boolean[N][M];
+		for(int i = 0; i<N;i++) {
+			String s = bf.readLine();
+			for(int j=0;j<M;j++) {
+				map[i][j] = s.charAt(j)-48;
+			}
+		}
+		//dfs탐색	
+		//dfs(0,0,0);
+		bfs(0,0);
+//		for(int[] e : value){
+//			System.out.println(Arrays.toString(e));
+//		}
+		System.out.println(value[N-1][M-1]);
 	}
-
-	static void bfs(Pos pos) {
-		Queue<Pos> qu = new LinkedList<>();
-		Queue<Pos> next_qu = new LinkedList<>();
-		arr[pos.y][pos.x] = 0;
-		qu.add(pos);
-		while (!qu.isEmpty()) {
-			Pos p = qu.poll();
-			for (int i = 0; i < 4; i++) {
-				int y = p.y + dy[i];
-				int x = p.x + dx[i];
-				if (x >= 0 && x < N && y >= 0 && y < M) {
-					if (arr[y][x] == -1) {
-						if (map[y][x] == 1) {
-							arr[y][x] = arr[p.y][p.x] + 1;
-							// map[y][x]=0;
-							next_qu.add(new Pos(y, x));
-						} else {
-							arr[y][x] = arr[p.y][p.x];
-							qu.add(new Pos(y, x));
-						}
-					} else {
-						if (map[y][x] == 1) {
-							if (arr[y][x] > arr[p.y][p.x] + 1) {
-								arr[y][x] = arr[p.y][p.x] + 1;
-								next_qu.add(new Pos(y, x));
-							}
-						} else {
-							if (arr[y][x] > arr[p.y][p.x]) {
-								arr[y][x] = arr[p.y][p.x];
-								qu.add(new Pos(y, x));
-							}
-						}
-					}
+	static void bfs(int y,int x) {
+		ArrayDeque<Node> q = new ArrayDeque<>();
+		q.add(new Node(y,x,0));
+		while(!q.isEmpty()) {
+			Node node = q.poll();
+			if(value[node.y][node.x]==-1) {
+				value[node.y][node.x] = node.cnt;
+			}
+			else {
+				if(value[node.y][node.x]>node.cnt) {
+					value[node.y][node.x] = node.cnt;
 				}
-				if (qu.isEmpty()) {
-					qu = next_qu;
-					next_qu = new LinkedList<>();
+				else {
+					continue;
+				}
+			}
+			for(int i = 0; i<4;i++) {
+				int ny = node.y+dy[i];
+				int nx = node.x+dx[i];
+				int cnt = node.cnt;
+				if(ny>N-1||ny<0||nx>M-1||nx<0) continue;
+				if(map[ny][nx]==1) {
+					q.add(new Node(ny,nx,cnt+1));
+				}
+				if(map[ny][nx]==0) {
+					q.add(new Node(ny,nx,cnt));
 				}
 			}
 		}
 	}
-}
-
-class Pos {
-	int y;
-	int x;
-
-	public Pos(int y, int x) {
-		this.y = y;
-		this.x = x;
+	static class Node{
+		int y;
+		int x;
+		int cnt;
+		public Node(int y,int x,int cnt) {
+			this.y = y;
+			this.x = x;
+			this.cnt = cnt;
+		}
 	}
+//	static void dfs(int y, int x,int cnt) {
+//		if(cnt+1>=ans) {
+//			return;
+//		}
+//		if(y==N-1&&x==M-1) {
+//			ans = Math.min(cnt,ans);
+//			return;
+//		}
+//		visited[y][x] = true;
+//		for(int i = 0;i<4;i++) {
+//			int ny = y + dy[i];
+//			int nx = x + dx[i];
+//			if(ny>N-1||ny<0||nx>M-1||nx<0)continue;
+//			if(visited[ny][nx])continue;
+//			if(map[ny][nx]==1) {
+//				dfs(ny,nx,cnt+1);
+//				visited[ny][nx]=false;
+//			}else {
+//				dfs(ny,nx,cnt);
+//				visited[ny][nx]=false;
+//			}
+//		}
+//	}
 }
